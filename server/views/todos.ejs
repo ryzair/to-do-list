@@ -1,0 +1,31 @@
+<!-- server/views/todos.ejs -->
+<h2>To-Do List</h2>
+<form action="/todos/create" method="POST">
+  <input type="text" name="title" placeholder="New To-Do Title" required>
+  <textarea name="description" placeholder="Description"></textarea>
+  <button type="submit">Add To-Do</button>
+</form>
+
+<table>
+  <tr>
+    <th>Title</th>
+    <th>Description</th>
+    <th>Actions</th>
+  </tr>
+  <% todos.forEach(todo => { %>
+    <tr>
+      <td><%= todo.title %></td>
+      <td><%= todo.description %></td>
+      <td>
+        <form action="/todos/update/<%= todo._id %>" method="POST" style="display:inline;">
+          <input type="text" name="title" value="<%= todo.title %>">
+          <textarea name="description"><%= todo.description %></textarea>
+          <button type="submit">Update</button>
+        </form>
+        <form action="/todos/delete/<%= todo._id %>" method="POST" style="display:inline;">
+          <button type="submit">Delete</button>
+        </form>
+      </td>
+    </tr>
+  <% }); %>
+</table>
