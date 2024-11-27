@@ -147,3 +147,17 @@ table th, table td {
   nav ul li a:hover {
     text-decoration: underline;
   }
+.logo img{ 
+  margin: 0 auto;
+  justify-content: center;
+  align-items: center;
+  width: 200px;
+  border-radius: 50%;
+  display: flex; 
+  object-fit: cover;
+}
+.logo-subtitle{
+  margin: 0 auto;
+  text-justify: center;
+  text-align: center;
+}
