@@ -1,4 +1,4 @@
-// server.js
+
 const app = require('./server/config/app');
 const mongoose = require('mongoose');
 let DB = require('./server/config/db');

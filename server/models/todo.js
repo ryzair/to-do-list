@@ -1,4 +1,4 @@
-// server/models/todo.js
+
 const mongoose = require('mongoose');
 
 let TodoSchema = mongoose.Schema({

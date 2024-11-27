@@ -1,31 +1,89 @@
-<!-- server/views/todos.ejs -->
-<h2>To-Do List</h2>
-<form action="/todos/create" method="POST">
-  <input type="text" name="title" placeholder="New To-Do Title" required>
-  <textarea name="description" placeholder="Description"></textarea>
-  <button type="submit">Add To-Do</button>
-</form>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/stylesheets/style.css">
+  <title>To-Do List</title>
+  <script>
+    // JavaScript to toggle visibility of forms
+    function toggleCreateForm() {
+      const createForm = document.getElementById('createForm');
+      createForm.style.display = createForm.style.display === 'none' ? 'block' : 'none';
+    }
 
-<table>
-  <tr>
-    <th>Title</th>
-    <th>Description</th>
-    <th>Actions</th>
-  </tr>
-  <% todos.forEach(todo => { %>
-    <tr>
-      <td><%= todo.title %></td>
-      <td><%= todo.description %></td>
-      <td>
-        <form action="/todos/update/<%= todo._id %>" method="POST" style="display:inline;">
-          <input type="text" name="title" value="<%= todo.title %>">
-          <textarea name="description"><%= todo.description %></textarea>
-          <button type="submit">Update</button>
-        </form>
-        <form action="/todos/delete/<%= todo._id %>" method="POST" style="display:inline;">
-          <button type="submit">Delete</button>
-        </form>
-      </td>
-    </tr>
-  <% }); %>
-</table>
+    function toggleUpdateForm(id) {
+      const updateForm = document.getElementById(`updateForm-${id}`);
+      updateForm.style.display = updateForm.style.display === 'none' ? 'block' : 'none';
+    }
+  </script>
+</head>
+<body>
+  <%- include('header') %>
+
+  <main>
+    <h2>Your To-Do List</h2>
+
+    <!-- Show Create Button Only for Logged-In Users -->
+    <% if (currentUser) { %>
+      <button onclick="toggleCreateForm()" class="btn">Create New To-Do</button>
+    <% } %>
+
+    <!-- Create To-Do Form -->
+    <div id="createForm" style="display: none;">
+      <form action="/todos/create" method="POST">
+        <input type="text" name="title" placeholder="New To-Do Title" required>
+        <textarea name="description" placeholder="Description"></textarea>
+        <button type="submit" class="btn">Add To-Do</button>
+      </form>
+    </div>
+
+    <!-- To-Do Items Table -->
+    <table>
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Description</th>
+          <% if (currentUser) { %>
+            <th>Actions</th>
+          <% } %>
+        </tr>
+      </thead>
+      <tbody>
+        <% todos.forEach(todo => { %>
+          <tr>
+            <td><%= todo.title %></td>
+            <td><%= todo.description %></td>
+            <% if (currentUser) { %>
+              <td>
+                <!-- Update Button -->
+                <button onclick="toggleUpdateForm('<%= todo._id %>')" class="btn">Update</button>
+
+                <!-- Delete Button -->
+                <form action="/todos/delete/<%= todo._id %>" method="POST" style="display:inline;">
+                  <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+
+                <!-- Update Form -->
+                <div id="updateForm-<%= todo._id %>" style="display: none;">
+                  <form action="/todos/update/<%= todo._id %>" method="POST">
+                    <input type="text" name="title" value="<%= todo.title %>" required>
+                    <textarea name="description"><%= todo.description %></textarea>
+                    <button type="submit" class="btn">Save Changes</button>
+                  </form>
+                </div>
+              </td>
+            <% } %>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+
+    <% if (!currentUser) { %>
+      <p>You must be logged in to create, update, or delete to-do items.</p>
+    <% } %>
+  </main>
+
+  <%- include('footer') %>
+</body>
+</html>
