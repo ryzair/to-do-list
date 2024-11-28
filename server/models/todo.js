@@ -1,4 +1,4 @@
-
+// database connection requirements
 const mongoose = require('mongoose');
 
 let TodoSchema = mongoose.Schema({

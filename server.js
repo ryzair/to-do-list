@@ -16,5 +16,5 @@ mongoose.connect(DB.URI,{useNewURIParser:true,useUnifiedTopology:true})
 
 // Start the server
 app.listen(PORT, () => {
-  console.log(`The server is running on port ${PORT}`);
+  console.log(`The server is running on port number ${PORT}`);
 });
