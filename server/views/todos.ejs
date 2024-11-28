@@ -7,18 +7,6 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
   <title>To-Do List</title>
-  <script>
-    // JavaScript to toggle visibility of forms
-    function toggleCreateForm() {
-      const createForm = document.getElementById('createForm');
-      createForm.style.display = createForm.style.display === 'none' ? 'block' : 'none';
-    }
-
-    function toggleUpdateForm(id) {
-      const updateForm = document.getElementById(`updateForm-${id}`);
-      updateForm.style.display = updateForm.style.display === 'none' ? 'block' : 'none';
-    }
-  </script>
 </head>
 <body>
   <%- include('header') %>
@@ -26,19 +14,18 @@
   <main>
     <h2>Your To-Do List</h2>
 
-    <!-- Show Create Button Only for Logged-In Users -->
+    <!-- Conditionally Show Create Form and Button for Authenticated Users -->
     <% if (currentUser) { %>
-      <button onclick="toggleCreateForm()" class="btn">Create New To-Do</button>
+      <button onclick="document.getElementById('createForm').style.display = 'block'" class="btn">Create New To-Do</button>
+      
+      <div id="createForm" style="display: none;">
+        <form action="/todos/create" method="POST">
+          <input type="text" name="title" placeholder="New To-Do Title" required>
+          <textarea name="description" placeholder="Description"></textarea>
+          <button type="submit" class="btn">Add To-Do</button>
+        </form>
+      </div>
     <% } %>
-
-    <!-- Create To-Do Form -->
-    <div id="createForm" style="display: none;">
-      <form action="/todos/create" method="POST">
-        <input type="text" name="title" placeholder="New To-Do Title" required>
-        <textarea name="description" placeholder="Description"></textarea>
-        <button type="submit" class="btn">Add To-Do</button>
-      </form>
-    </div>
 
     <!-- To-Do Items Table -->
     <table>
@@ -59,7 +46,7 @@
             <% if (currentUser) { %>
               <td>
                 <!-- Update Button -->
-                <button onclick="toggleUpdateForm('<%= todo._id %>')" class="btn">Update</button>
+                <button onclick="document.getElementById('updateForm-<%= todo._id %>').style.display = 'block'" class="btn">Update</button>
 
                 <!-- Delete Button -->
                 <form action="/todos/delete/<%= todo._id %>" method="POST" style="display:inline;">
