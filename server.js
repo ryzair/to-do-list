@@ -18,3 +18,12 @@ mongoose.connect(DB.URI,{useNewURIParser:true,useUnifiedTopology:true})
 app.listen(PORT, () => {
   console.log(`The server is running on port number ${PORT}`);
 });
+
+// Create Docker File
+FROM node:18-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+EXPOSE 3000
+CMD ["npm", "app.js"]
